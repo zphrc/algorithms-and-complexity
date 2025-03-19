@@ -30,15 +30,20 @@ void quick_sort(int arr[], int len) {
     int stack[len], high, low, pivot, x, y, temp, pi;
     int top = -1;
 
-    stack[++top] = 0;
+    // pushing initial bounds onto the stack
+    stack[++top] = 0; 
     stack[++top] = len - 1;
     
+    // runs while there are subarrays to process
     while (top >= 0) {
+        // retrieves current bounds from the stack
         high = stack[top--];
         low = stack[top--];
 
-        pivot = arr[high];
-        x = low - 1;
+        pivot = arr[high]; // last element is pivot
+        x = low - 1; // index where smaller element will be placed
+        
+        // smaller elements are placed into subarray
         for (y = low; y < high; y++) {
             if (arr[y] < pivot) {
                 x++;
@@ -47,15 +52,20 @@ void quick_sort(int arr[], int len) {
                 arr[x] = temp;
             }
         }
+
+        // places pivot in its correct position
         temp = arr[x + 1];
         arr[x + 1] = arr[high];
         arr[high] = temp;
-        pi = x + 1;
+        pi = x + 1;  // final pivot index
 
+        // if there are elements left of pivot, push bounds of subarray onto stack
         if (pi - 1 > low) {
             stack[++top] = low;
             stack[++top] = pi - 1; 
         }
+
+        // if there are elements right of pivot, push bounds of subarray onto stack
         if (pi + 1 < high) {
             stack[++top] = pi + 1;
             stack[++top] = high;

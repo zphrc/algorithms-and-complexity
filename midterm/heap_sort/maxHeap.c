@@ -78,7 +78,7 @@ void heap_sort(int arr[], int len) {
                 }
         
                 if (max != root) {
-                    swapped = 0;
+                    swapped = 1;
                     temp = arr[root];
                     arr[root] = arr[max];
                     arr[max] = temp;
@@ -87,4 +87,11 @@ void heap_sort(int arr[], int len) {
             }
         }
     }
+
+    // // descending order for maxheap
+    // for (x = 0; x < len / 2; x++) {
+    //     temp = arr[x];
+    //     arr[x] = arr[len - 1 - x];
+    //     arr[len - 1 - x] = temp;
+    // }
 }

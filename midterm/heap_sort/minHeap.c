@@ -28,6 +28,7 @@ void display(int arr[], int len){
 void heap_sort(int arr[], int len) {
     int x, root, left, right, min, temp, swapped;
     int heap_size = len;
+    
     for (x = heap_size / 2 - 1; x >= 0; x--) {
         root = x;
         for (swapped = 1; swapped; ) {
@@ -85,4 +86,11 @@ void heap_sort(int arr[], int len) {
             }
         }
     }
+
+    // // ascending order for minheap
+    // for (x = 0; x < len / 2; x++) {
+    //     temp = arr[x];
+    //     arr[x] = arr[len - 1 - x];
+    //     arr[len - 1 - x] = temp;
+    // }
 }
