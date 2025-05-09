@@ -1,3 +1,0 @@
-B-trees
-- well-suited for database systems
-- reduce disk operations

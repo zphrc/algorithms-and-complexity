@@ -1,4 +1,4 @@
-// Searching a key on a B-tree in C
+// Searching a key on a B-tree in C - Programiz
 
 #include <stdio.h>
 #include <stdlib.h>

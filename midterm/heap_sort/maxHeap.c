@@ -9,7 +9,7 @@ int main() {
 
     printf("Unsorted: "); 
     display(arr, len);
-
+    
     heap_sort(arr, len);
     printf("Sorted: "); 
     display(arr, len);
