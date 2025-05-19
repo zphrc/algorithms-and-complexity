@@ -58,6 +58,8 @@ typedef struct node {
     struct node* right;
 } AVLNode;
 
+typedef enum {TRUE, FALSE} boolean;
+
 int max(int, int);
 int height(AVLNode *);
 void updateHeight(AVLNode *);
@@ -65,9 +67,11 @@ int getBalance(AVLNode *);
 void rightRotate(AVLNode **);
 void leftRotate(AVLNode **);
 void inorder(AVLNode *);
+AVLNode *minNode(AVLNode *);
 
 void insert(AVLNode **, int);
 void delete(AVLNode **, int);
+boolean search(AVLNode *, int);
 
 int main() {
     AVLNode *root = NULL;
@@ -83,6 +87,19 @@ int main() {
     inorder(root);
     printf("\n");
 
+    delete(&root, 30);
+    printf("In-order after deleting 30: ");
+    inorder(root);
+    printf("\n");
+
+    printf("Searching 50...\n");
+    (search(root, 50)) ? printf("Did not find 50.") : printf("Found 50!");
+    printf("\n");
+
+    printf("Searching 70...\n");
+    (search(root, 70)) ? printf("Did not find 70.") : printf("Found 70!");
+    printf("\n");
+
     return 0;
 }
 
@@ -95,7 +112,9 @@ int height(AVLNode *A) {
 }
 
 void updateHeight(AVLNode *A) {
-    A->height = 1 + max(height(A->left), height(A->right));
+    if (A != NULL) {
+        A->height = 1 + max(height(A->left), height(A->right));
+    }
 }
 
 int getBalance(AVLNode *A) {
@@ -128,6 +147,10 @@ void inorder(AVLNode *A) {
         printf("%d ", A->key);
         inorder(A->right);
     }
+}
+
+AVLNode *minNode(AVLNode *A) {
+    return (A == NULL)? NULL : ((A->left == NULL) ? A : minNode(A->left));
 }
 
 void insert(AVLNode **A, int key) {
@@ -180,7 +203,9 @@ void delete(AVLNode **A, int key) {
                 free(*A);
                 (*A) = NULL;
             } else if ((*A)->left != NULL && (*A)->right != NULL) {
-                // ehe too long maybe i'll take it on a bit later
+                temp = minNode((*A)->right);
+                (*A)->key = temp->key;
+                delete(&((*A)->right), (*A)->key);
             } else if ((*A)->left != NULL || (*A)->right != NULL) {
                 temp = (*A)->left ? (*A)->left : (*A)->right;
                 free(*A);
@@ -189,6 +214,39 @@ void delete(AVLNode **A, int key) {
         }
 
         // update height & rebalance
+        updateHeight(*A);
+        int balance = getBalance(*A);
+        
+        if (balance > 1) {
+            if (getBalance((*A)->left) >= 0) {
+                rightRotate(A);
+            } else {
+                // the left child's right subtree is heavier.
+                leftRotate(&((*A)->left));
+                rightRotate(A);
+            }
+        } else if (balance < -1) {
+            if (getBalance((*A)->right) >= 0) {
+                leftRotate(A);
+            } else {
+                // the right child's left subtree is heavier.
+                rightRotate(&((*A)->right));
+                leftRotate(A);
+            }
+        }
     }
 }
 
+boolean search(AVLNode *A, int key) {
+    boolean found = FALSE;
+    if (A != NULL) {
+        if (A->key == key) {
+            found = TRUE;
+        } else if (key > A->key) {
+            found = search(A->right, key);
+        } else if (key < A->key) {
+            found = search(A->left, key);
+        }
+    }
+    return found;
+}
