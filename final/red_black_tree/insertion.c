@@ -1,38 +1,3 @@
-/**
- * Red-Black Trees - Study Notes and Documentation
- * -----------------------------------------------
- * Definition:
- *   - A Red-Black Tree is a self-balancing binary search tree (BST).
- *   - Nodes are colored either RED or BLACK to enforce balancing rules.
- *
- * Properties:
- *   1. Every node is either RED or BLACK
- *   2. The root is always BLACK
- *   3. Red nodes cannot have red children (no two reds in a row)
- *   4. Every path from a node to its descendant NULL nodes has the same number of BLACK nodes
- *   5. New nodes are inserted RED (fix-up is applied afterward)
- *
- * Key Operations:
- *   - Insertion: O(log n)
- *   - Deletion:  O(log n)
- *   - Search:    O(log n)
- *
- * Balancing:
- *   - Maintained via a combination of:
- *       • Rotations (left or right)
- *       • Recoloring of nodes
- *   - Ensures tree remains roughly balanced with minimal height
- *
- * Comparison with AVL Trees:
- *   - Red-Black Trees are more flexible (allow looser balancing)
- *   - May have slightly worse search performance than AVL
- *   - Insertion and deletion are often faster in practice
- *
- * Implementation Note:
- *   - Each node must track both its color and child pointers
- *   - Fix-up procedures are required after insertions and deletions to restore properties
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -46,7 +11,7 @@ typedef struct node {
     struct node* parent;
 } RBNode;
 
-void validate(RBNode **);
+void insert_fixup(RBNode **);
 void leftRotate(RBNode **);
 void rightRotate(RBNode **);
 void inorder(RBNode *);
@@ -135,15 +100,15 @@ void insert(RBNode **A, int key, RBNode *parent) {
             insert(&((*A)->left), key, *A);
         }
 
-        validate(A);
+        insert_fixup(A);
     }
 }
 
-void delete(RBNode **A, int key) {
+// void delete(RBNode **A, int key) {
 
-}
+// }
 
-void validate(RBNode **A) {
+void insert_fixup(RBNode **A) {
     if (*A != NULL && (*A)->parent != NULL && (*A)->parent->parent != NULL) {
         if ((*A)->color == RED && (*A)->parent->color == RED) {
 
@@ -156,7 +121,7 @@ void validate(RBNode **A) {
                 parent->color = BLACK;
                 uncle->color = BLACK;
                 grandparent->color = RED;
-                validate(&grandparent);
+                insert_fixup(&grandparent);
                 return;
             }
 
